@@ -12,6 +12,6 @@ this tool allows you to spy on any possible camera connected through the interne
      
   - > onvif-zeep
 - ### Redist
-  - > .Net 4
+  - > .Net 4 x64
     
   - > visual c++ 2015-2022 x64
