@@ -3,9 +3,13 @@ this tool allows you to spy on any possible camera connected through the interne
 ## requirements
 ### python packages
 > pythonnet
+> 
 > wxpython
+> 
 > numpy
+> 
 > requests
+> 
 > onvif-zeep
 ### Redist
 > .Net 4
