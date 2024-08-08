@@ -1,0 +1,5 @@
+onvif-zeep
+wxpython
+requests
+numpy
+pythonnet
