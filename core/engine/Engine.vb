@@ -46,9 +46,9 @@ Namespace Utilities
         End Function
 
         Sub WriteFile(ByVal filepath as String, ByVal data as String, ByVal flag as String)
-            If flag = "w" Then
+            If flag = "a" Then
                 writer = New StreamWriter(filepath, append:=True)
-            ElseIf flag = "a" Then
+            ElseIf flag = "w" Then
                 writer = New StreamWriter(filepath, append:=False)
             End IF
             writer.WriteLine(data)
@@ -66,10 +66,12 @@ Namespace Engines
         Private Dim _FilePath as String
         Private Dim _FetchData as Boolean
         Private Dim _Ip as String
+        Private Dim _StartWrite as Boolean
 
         Public Sub New( ByVal FilePath as String )
             _FilePath = FilePath
             _FetchData = False
+            _StartWrite = True
         End Sub
 
         Public ReadOnly Property GetFetch() as Boolean
@@ -90,11 +92,12 @@ Namespace Engines
                     For value2 as Integer = 0 To &HFF
                         For value1 as Integer = 0 To &HFF
                             _Ip = value4.ToString()&"."&value3.ToString()&"."&value2.ToString()&"."&value1.ToString()
-                            IF Utilities.FileUtils.GetFileSize( _FilePath ) <= &H5f5e100 Then
+                            IF Utilities.FileUtils.GetFileSize( _FilePath ) <= &H5f5e100 And Not _StartWrite Then
                                 Utilities.FileUtils.WriteFile(_FilePath,_Ip,"a")
                             Else
                                 Utilities.Kernel32.Sleep(2000)
                                 Utilities.FileUtils.WriteFile(_FilePath,_Ip,"w")
+                                _StartWrite = False
                             End IF
                         Next value1
                     Next value2
