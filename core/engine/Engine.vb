@@ -1,4 +1,5 @@
 Imports System.IO
+Imports System.IO.Pipes
 Imports System.Runtime.InteropServices
 
 Namespace Utilities
@@ -45,10 +46,11 @@ Namespace Utilities
         End Function
 
         Sub WriteFile(ByVal filepath as String, ByVal data as String, ByVal flag as String)
-            If flag == "w" Then
+            If flag = "w" Then
                 writer = New StreamWriter(filepath, append:=True)
-            ElseIf flag == "a" Then
-                writer = New StreamWriter(filepath, write:=True)
+            ElseIf flag = "a" Then
+                writer = New StreamWriter(filepath, append:=False)
+            End IF
             writer.WriteLine(data)
             writer.Close()
         End Sub
@@ -63,12 +65,11 @@ Namespace Engines
 
         Private Dim _FilePath as String
         Private Dim _FetchData as Boolean
-        
+        Private Dim _Ip as String
 
         Public Sub New( ByVal FilePath as String )
             _FilePath = FilePath
             _FetchData = False
-            _Writer = New StreamWriter( FilePath )
         End Sub
 
         Public ReadOnly Property GetFetch() as Boolean
@@ -88,12 +89,12 @@ Namespace Engines
                 For value3 as Integer = 0 To &HFF
                     For value2 as Integer = 0 To &HFF
                         For value1 as Integer = 0 To &HFF
+                            _Ip = value4.ToString()&"."&value3.ToString()&"."&value2.ToString()&"."&value1.ToString()
                             IF Utilities.FileUtils.GetFileSize( _FilePath ) <= &H5f5e100 Then
-                                _Writer.WriteLine( value4 & "." & value3 & "." & value2 & "." & value1)
+                                Utilities.FileUtils.WriteFile(_FilePath,_Ip,"a")
                             Else
-                                _Writer.Close()
                                 Utilities.Kernel32.Sleep(2000)
-                                _Writer = New StreamWriter(_FilePath)
+                                Utilities.FileUtils.WriteFile(_FilePath,_Ip,"w")
                             End IF
                         Next value1
                     Next value2
@@ -103,7 +104,6 @@ Namespace Engines
         End Sub
 
         Public Sub RemoveFile()
-            _Writer.Close()
             Utilities.FileUtils.DeleteFile(_FilePath)
         End Sub
     
