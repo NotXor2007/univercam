@@ -64,14 +64,12 @@ Namespace Engines
     Public Class AutomaticGenerate
 
         Private Dim _FilePath as String
-        Private Dim _FetchData as Boolean
         Private Dim _Ip as String
         Private Dim _StartWrite as Boolean
         Private Dim _GIPV4 As Integer,_GIPV3 As Integer,_GIPV2 As Integer,_GIPV1 As Integer
 
         Public Sub New( ByVal FilePath as String )
             _FilePath = FilePath
-            _FetchData = False
             _StartWrite = True
             _GIPV1 = 0
             _GIPV2 = 0
@@ -79,15 +77,12 @@ Namespace Engines
             _GIPV4 = 0
         End Sub
 
-        Public ReadOnly Property GetFetch() as Boolean
-            Get
-                Return _FetchData
-            End Get
-        End Property
-
-        Public WriteOnly Property SetFetch() as Boolean
+        Public WriteOnly Property SetSave() as Boolean
             Set(ByVal value as Boolean)
-                _FetchData = value
+                _GIPV1 = value
+                _GIPV2 = value
+                _GIPV3 = value
+                _GIPV4 = value
             End Set
         End Property
 
@@ -101,10 +96,10 @@ Namespace Engines
                             _GIPV3 = value3
                             _GIPV4 = value4
                             _Ip = value4.ToString()&"."&value3.ToString()&"."&value2.ToString()&"."&value1.ToString()
-                            IF Utilities.FileUtils.GetFileSize( _FilePath ) <= &H5f5e100 And Not _StartWrite Then
+                            IF Utilities.FileUtils.GetFileSize( _FilePath ) < &H5f5e102 And Not _StartWrite Then
                                 Utilities.FileUtils.WriteFile(_FilePath,_Ip,"a")
-                            ElseIF Utilities.FileUtils.GetFileSize( _FilePath ) <= &H5f5e100 And _StartWrite Then
-                                Utilities.Kernel32.Sleep(2000)
+                            ElseIF _StartWrite Then
+                                Utilities.Kernel32.Sleep(1000)
                                 Utilities.FileUtils.WriteFile(_FilePath,_Ip,"w")
                                 _StartWrite = False
                             Else

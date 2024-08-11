@@ -15,6 +15,7 @@ if __name__ == "__main__":
     #p1 = multiprocessing.Process(target=genprocess)
     #p1.start()
     gen = AutomaticGenerate(".\\ipgens.dat");
-    gen.GenerateIp()
-    while True:print("running")
+    while True:
+         gen.GenerateIp()
+         print("got it!")
     
