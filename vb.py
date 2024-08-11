@@ -10,10 +10,11 @@ from Engines import AutomaticGenerate
 def genprocess():
     gen = AutomaticGenerate(".\\ipgens.dat");gen.GenerateIp()
 
+#EntryPoint
 if __name__ == "__main__":
-    p1 = multiprocessing.Process(target=genprocess)
-    p1.start()
+    #p1 = multiprocessing.Process(target=genprocess)
+    #p1.start()
+    gen = AutomaticGenerate(".\\ipgens.dat");
+    gen.GenerateIp()
     while True:print("running")
-    
-    
     
